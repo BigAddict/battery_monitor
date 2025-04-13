@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Name=Battery Monitor
+Comment=Monitors laptop battery and alerts when below 15%
+Exec=python3 %ABSOLUTE_PATH%/battery_monitor.py
+Terminal=false
+X-GNOME-Autostart-enabled=true
