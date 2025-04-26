@@ -6,16 +6,16 @@ when the battery level falls below a specified threshold.
 This script runs in the background and checks battery status at regular intervals.
 It sends a system notification when the battery is low and not charging.
 """
-
-import psutil
-import time
+from data_scrapping import log_battery_status
+from pathlib import Path
+import argparse
 import platform
 import logging
-from pathlib import Path
+import psutil
+import time
+import json
 import sys
 import os
-import json
-import argparse
 
 # Configure paths
 BASE_DIR = Path(__file__).resolve().parent
@@ -150,6 +150,7 @@ def parse_arguments():
     parser.add_argument("-i", "--interval", type=int, help="Check interval in seconds")
     parser.add_argument("-d", "--debug", action="store_true", help="Enable debug logging")
     parser.add_argument("--create-config", action="store_true", help="Create default config file and exit")
+    parser.add_argument("--test", action="store_true", help="Run in test mode (10s interval) 🚀")
     
     return parser.parse_args()
 
@@ -169,6 +170,11 @@ def main():
     
     # Load configuration
     config = load_config()
+
+        # 👇 FOR TESTING: Force fast logging interval
+    if args.test:
+        print("[TEST MODE] Running in fast logging mode: every 10 seconds")
+        config['check_interval'] = 10
     
     # Override with command line arguments if provided
     if args.threshold:
@@ -229,6 +235,12 @@ def main():
                 if already_alerted:
                     logger.debug("Alert condition cleared")
                 already_alerted = False
+
+            try:
+                log_battery_status()
+            except Exception as e:
+                send_notification("Data Scrapping", f"Scrapping failed\n{e}")
+                continue
                 
             # Wait before next check
             time.sleep(CHECK_INTERVAL)

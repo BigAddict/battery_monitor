@@ -1,2 +1,4 @@
 /.venv
 /logs
+battery_log.csv
+__pycache__/data_scrapping.cpython-311.pyc
