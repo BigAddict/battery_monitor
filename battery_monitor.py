@@ -156,6 +156,7 @@ def parse_arguments():
 
 def main():
     """Main function to monitor battery and send alerts"""
+
     global logger
     
     # Parse command line arguments
@@ -201,6 +202,8 @@ def main():
     NOTIFICATION_REPEAT_DELAY = config['notification_repeat_delay']
     
     logger.info(f"Battery monitor started (threshold: {BATTERY_THRESHOLD}%, interval: {CHECK_INTERVAL}s)")
+    
+    send_notification("BigAddict", "A battery monitor has being started. Innovation at it's peek")
     
     # Keep track of alert state
     already_alerted = False
